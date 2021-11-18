@@ -8,20 +8,63 @@ namespace Занятие_18_Задача
 {
     class Program
     {
+        //задача : проверить корректно ли расставлены скобки
         static void Main(string[] args)
         {
-            static bool IsWellFormedBrackets(string input)
+            string str = "({}{[]{}()}{}";
+            Stack<char> stk = new Stack<char>();
+            bool trouble = false;
+            Console.WriteLine(str);
+            foreach (var item in str)
             {
-                string previous = "";
-                while (input.Length != previous.Length)
+                switch (item)
                 {
-                    previous = input;
-                    input = input
-                        .Replace("()", String.Empty)
-                        .Replace("[]", String.Empty)
-                        .Replace("{}", String.Empty);
+                    case '(':
+                        stk.Push(')');
+                        break;
+
+                    case '[':
+                        stk.Push(']');
+                        break;
+
+                    case '{':
+                        stk.Push('}');
+                        break;
+
+                    case ')':
+                        trouble = PopStack(stk, item);
+                        break;
+
+                    case ']':
+                        trouble = PopStack(stk, item);
+                        break;
+                    case '}':
+                        trouble = PopStack(stk, item);
+                        break;
                 }
-                return (input.Length == 0);
+            }
+            if (trouble || stk.Count > 0)
+            {
+                Console.WriteLine("Скобки не корректны");
+            }
+            else
+            {
+                Console.WriteLine("Скобки корректны");
+            }
+            Console.ReadKey();
+
+        }
+        static bool PopStack(Stack<char> stk, char item)
+        {
+            if (stk.Count > 0 && item == stk.Peek())
+            {
+                stk.Pop();
+                return false;
+            }
+            else
+            {
+                return true;
+
             }
         }
     }
